@@ -4,8 +4,20 @@ using UnityEngine.SceneManagement;
 public class CollisionHandler : MonoBehaviour
 {
     [SerializeField] float levelLoadDelayDuration;
+    [SerializeField] AudioClip crashClip;
+    [SerializeField] AudioClip levelFinishClip;
+
+    AudioSource audioSource;
+    bool isTransitioning;
+
+    private void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
+
     private void OnCollisionEnter(Collision other)
     {
+        if (isTransitioning) return;
         switch (other.gameObject.tag)
         {
             case "Friendly":
@@ -21,14 +33,25 @@ public class CollisionHandler : MonoBehaviour
     }
     void StartReloadSequence()
     {
+        isTransitioning = true;
+        audioSource.Stop();
+        //! this stops all audio present in that scene
+        audioSource.PlayOneShot(crashClip);
         GetComponent<Movement>().enabled = false;
         Invoke("ReloadLevel", levelLoadDelayDuration);
+
+
     }
 
     void StartLoadNextLevelSequence()
     {
+        isTransitioning = true;
+        audioSource.Stop();
+        //! this stops all audio present in that scene
+        audioSource.PlayOneShot(levelFinishClip);
         GetComponent<Movement>().enabled = false;
         Invoke("LoadNextLevel", levelLoadDelayDuration);
+
     }
     void ReloadLevel()
     {
