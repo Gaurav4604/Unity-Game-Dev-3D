@@ -7,6 +7,9 @@ public class CollisionHandler : MonoBehaviour
     [SerializeField] AudioClip crashClip;
     [SerializeField] AudioClip levelFinishClip;
 
+    [SerializeField] ParticleSystem crashParticleEffect;
+    [SerializeField] ParticleSystem levelFinishParticleEffect;
+
     AudioSource audioSource;
     bool isTransitioning;
 
@@ -34,6 +37,7 @@ public class CollisionHandler : MonoBehaviour
     void StartReloadSequence()
     {
         isTransitioning = true;
+        crashParticleEffect.Play();
         audioSource.Stop();
         //! this stops all audio present in that scene
         audioSource.PlayOneShot(crashClip);
@@ -46,6 +50,7 @@ public class CollisionHandler : MonoBehaviour
     void StartLoadNextLevelSequence()
     {
         isTransitioning = true;
+        levelFinishParticleEffect.Play();
         audioSource.Stop();
         //! this stops all audio present in that scene
         audioSource.PlayOneShot(levelFinishClip);
