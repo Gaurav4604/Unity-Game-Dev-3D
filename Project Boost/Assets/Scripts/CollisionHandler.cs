@@ -11,11 +11,22 @@ public class CollisionHandler : MonoBehaviour
     [SerializeField] ParticleSystem levelFinishParticleEffect;
 
     AudioSource audioSource;
-    bool isTransitioning;
+    bool isTransitioning, debugCollisionActive;
 
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
+    }
+
+    void Update()
+    {
+        RespondToDebugKeys();
+    }
+
+    void RespondToDebugKeys()
+    {
+        checkCollisionDebugPressed();
+        checkNextLevelDebugPressed();
     }
 
     private void OnCollisionEnter(Collision other)
@@ -30,10 +41,28 @@ public class CollisionHandler : MonoBehaviour
                 StartLoadNextLevelSequence();
                 break;
             default:
-                StartReloadSequence();
+                if (!debugCollisionActive)
+                {
+                    StartReloadSequence();
+                }
                 break;
         }
     }
+
+    //! debug based functions
+    void checkCollisionDebugPressed()
+    {
+        if (Input.GetKey(KeyCode.L))
+            debugCollisionActive = !debugCollisionActive;
+    }
+
+    void checkNextLevelDebugPressed()
+    {
+        if (Input.GetKey(KeyCode.C))
+            StartLoadNextLevelSequence();
+    }
+
+
     void StartReloadSequence()
     {
         isTransitioning = true;
