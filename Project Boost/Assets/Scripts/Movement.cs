@@ -20,11 +20,11 @@ public class Movement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ProcessThrust();
     }
     //! late update is used to compute physics based calculations after update is called
     void LateUpdate()
     {
+        ProcessThrust();
         ProcessRotation();
 
     }
